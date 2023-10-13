@@ -24,7 +24,7 @@ app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 
 // file storage
 const storage = multer.diskStorage({
-    destination: function(req,file,cb){
+    destination: function(req, file, cb){
         cb(null, "public/assets");
     },
     filename: function (req, file, cb) {
@@ -32,4 +32,14 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage });
-//from windows
+
+// Mongoose setup
+const PORT = process.env.PORT || 6001;
+mongoose.connect(process.env.MONGO_URL,{
+    useNewUrlParser : true,
+    useUnifiedTopology : true,
+})
+.then(() => {
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+})
+.catch((error) => console.log(`${error} did not connect`));
